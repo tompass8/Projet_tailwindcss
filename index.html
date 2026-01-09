@@ -2,34 +2,72 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mon Projet Tailwind</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Générateur de Sensation</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="script.js" defer></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center justify-center p-6 font-sans">
 
-    <div class="w-full max-w-xl">
-    
-            <div class="flex space-x-4 justify-between p-8">
+    <div class="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-700">
+        
+        <div class="p-8 text-center border-b border-gray-700 bg-gray-900/50">
+                
+            <p class="text-gray-400 text-sm uppercase tracking-widest">Générateur de Sensation par IA</p>
+        
+        </div>
 
-                <div class="bg-indigo-50 border-1-4 border-indigo-500 p-6 shadow-inner mt-8">
-                    <p id="output-message" class="text-xl text-center text-gray-600 italic font-medium"> le texte est la </p>
+        <div class="p-10 min-h-[350px] flex flex-col items-center justify-center bg-gray-900 relative gap-6">
+            <div class="absolute inset-0 bg-carbon opacity-10"></div>
+            
+            <img id="output-image" 
+                 src="" 
+                 alt="" 
+                 class="hidden w-48 h-48 object-cover rounded-xl shadow-2xl border-2 border-gray-700 relative z-10">
 
-             <button id="btn-compliment" class="bg-green-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold
-                         hover:bg-green-600 hover:shadow-lg
-                        transition duration-300">Compliment</button>
+            <p id="output-message" class="relative z-10 text-2xl md:text-3xl text-center font-medium text-gray-300 transition-all duration-300">
+                En attente d'instruction...
+            </p>
+        </div>
 
-              <button id="btn-insulte" class="bg-red-500 text-white rounded-lg shadow-md py-3 px-12  text-lg font-semibold
-                    hover:bg-red-600 hover:shadow-lg
-                     transition duration-300">Insulte</button>
+        <div class="p-8 bg-gray-800">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                
+                <button id="btn-compliment" 
+                    class="group relative py-4 px-6 rounded-xl bg-gray-700 hover:bg-emerald-900/30 border border-emerald-500/30 hover:border-emerald-500 transition-all duration-300 shadow-lg hover:shadow-emerald-500/20">
+                    <span class="block text-emerald-400 font-bold text-lg group-hover:scale-105 transition-transform">
+                        Compliment
+                    </span>
+                    <span class="text-xs text-emerald-600/70 uppercase font-semibold">Mode Positif</span>
+                </button>
+
+                <button id="btn-insulte" 
+                    class="group relative py-4 px-6 rounded-xl bg-gray-700 hover:bg-red-900/30 border border-red-500/30 hover:border-red-500 transition-all duration-300 shadow-lg hover:shadow-red-500/20">
+                    <span class="block text-red-500 font-bold text-lg group-hover:scale-105 transition-transform">
+                        Insulte
+                    </span>
+                    <span class="text-xs text-red-600/70 uppercase font-semibold">Mode Agressif</span>
+                </button>
    
-             <button id="btn-declaration" class ="bg-pink-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold
-                         hover:bg-pink-600 hover:shadow-lg
-                     transition duration-300">Declaration</button> 
+                <button id="btn-declaration" 
+                    class="group relative py-4 px-6 rounded-xl bg-gray-700 hover:bg-pink-900/30 border border-pink-500/30 hover:border-pink-500 transition-all duration-300 shadow-lg hover:shadow-pink-500/20">
+                    <span class="block text-pink-500 font-bold text-lg group-hover:scale-105 transition-transform">
+                        Amour
+                    </span>
+                    <span class="text-xs text-pink-600/70 uppercase font-semibold">Mode Passion</span>
+                </button> 
+
             </div>
-            </div>
+        </div>
+        
+        <div class="px-6 py-3 bg-gray-900 border-t border-gray-700 flex justify-between items-center text-xs text-gray-500 font-mono">
+            <span>STATUS: ONLINE</span>
+            <span>V 1.0.0</span>
+        </div>
     </div>
-    
 </body>
 </html>
-
-<link href="./output.css" rel="stylesheet">
