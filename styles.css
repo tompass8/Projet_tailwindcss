@@ -1,35 +1,20 @@
-/* Import de la police Inter depuis Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+/* 1. Imports et config de base */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap');
 
-/* Application de la police */
 body {
     font-family: 'Inter', sans-serif;
 }
 
-/* Classe pour l'image de fond (pattern carbone) */
 .bg-carbon {
     background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
 }
 
-/* Définition de l'animation d'apparition */
 @keyframes fadeIn {
-    0% { 
-        opacity: 0; 
-        transform: translateY(10px); 
-    }
-    100% { 
-        opacity: 1; 
-        transform: translateY(0); 
-    }
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
-/* La classe qu'on va ajouter via JS pour lancer l'animation */
 .animate-fade-in {
     animation: fadeIn 0.5s ease-out forwards;
 }
 
-
-/*  Force le gras sur TOUS les éléments quand cette classe est active */
-.mode-ultra-gras * {
-    font-weight: 800 !important; /* 800 = ExtraBold */
-}
