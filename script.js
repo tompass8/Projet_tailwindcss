@@ -1,32 +1,109 @@
 // --- 1. CONFIGURATION & LOCALSTORAGE ---
-let userName = localStorage.getItem('verbai_name') || "Humain"; // Récupère le nom ou met "Humain" par défaut
 
-// Gestion du panneau de config
+let userName = localStorage.getItem('verbai_name') || "Humain";
+
+// On charge les valeurs sauvegardées, ou des valeurs par défaut
+let savedScale = parseInt(localStorage.getItem('verbai_scale')) || 100;
+let savedBold = localStorage.getItem('verbai_bold') === "true"; 
+
+// Variables de travail (ce que l'utilisateur est en train de modifier)
+let currentScale = savedScale;
+let currentBold = savedBold;
+
+
+// --- DOM UI CONFIG ---
 const btnSettings = document.getElementById('btn-settings');
 const modalSettings = document.getElementById('modal-settings');
 const btnSaveSettings = document.getElementById('btn-save-settings');
 const inputName = document.getElementById('input-name');
 
-// Ouvrir la modale
+const btnDecrease = document.getElementById('btn-decrease');
+const btnIncrease = document.getElementById('btn-increase');
+const displayPercent = document.getElementById('display-percent');
+const checkBold = document.getElementById('check-bold');
+
+
+// --- FONCTION D'APPLICATION VISUELLE (LIVE) ---
+// C'est elle qui fait la magie : elle applique les styles immédiatement
+function updateVisuals(scale, isBold) {
+    // 1. Zoom Global (sur la racine HTML)
+    document.documentElement.style.fontSize = scale + "%";
+    
+    // 2. Gras Global (sur le body)
+    if (isBold) {
+        document.body.classList.add('mode-ultra-gras');
+    } else {
+        document.body.classList.remove('mode-ultra-gras');
+    }
+
+    // 3. Mise à jour des textes de la modale
+    displayPercent.textContent = scale + "%";
+    checkBold.checked = isBold;
+}
+
+
+// --- OUVERTURE MODALE ---
 btnSettings.addEventListener('click', () => {
-    inputName.value = userName === "Humain" ? "" : userName; // Pré-remplir
+    inputName.value = userName === "Humain" ? "" : userName; 
+    
+    // On reprend les valeurs actuelles pour commencer
+    currentScale = savedScale;
+    currentBold = savedBold;
+    
+    // On met à jour l'affichage de la modale
+    updateVisuals(currentScale, currentBold);
+    
     modalSettings.classList.remove('hidden');
 });
 
-// Sauvegarder et fermer
+
+// --- GESTION DU ZOOM (+ / -) EN DIRECT ---
+btnDecrease.addEventListener('click', () => {
+    if (currentScale > 50) {
+        currentScale -= 10;
+        // HOP ! On applique tout de suite pour voir le résultat
+        updateVisuals(currentScale, currentBold);
+    }
+});
+
+btnIncrease.addEventListener('click', () => {
+    if (currentScale < 180) { // J'ai monté un peu la limite max pour le fun
+        currentScale += 10;
+        // HOP ! On applique tout de suite
+        updateVisuals(currentScale, currentBold);
+    }
+});
+
+// --- GESTION DU GRAS EN DIRECT ---
+checkBold.addEventListener('change', (e) => {
+    currentBold = e.target.checked;
+    // HOP ! On applique tout de suite
+    updateVisuals(currentScale, currentBold);
+});
+
+
+// --- SAUVEGARDE (PERSISTANCE) ---
+// C'est seulement ici qu'on enregistre définitivement dans le navigateur
 btnSaveSettings.addEventListener('click', () => {
+    // 1. Sauvegarde Nom
     const newName = inputName.value.trim();
     if (newName) {
         userName = newName;
-        localStorage.setItem('verbai_name', userName); // Sauvegarde dans le navigateur
+        localStorage.setItem('verbai_name', userName);
     }
+
+    // 2. Sauvegarde Taille & Gras (Validation finale)
+    savedScale = currentScale;
+    savedBold = currentBold;
+    
+    localStorage.setItem('verbai_scale', savedScale);
+    localStorage.setItem('verbai_bold', savedBold);
+
     modalSettings.classList.add('hidden');
 });
 
 
-// --- 2. DONNÉES (Avec placeholder {name}) ---
-// Le code remplacera automatiquement "{name}" par le prénom de l'utilisateur
-
+// --- 2. DONNÉES (Inchangées) ---
 const compliments = [
     "{name}, ton code est aussi propre que de l'eau de roche.",
     "{name}, tu as une logique imparable, c'est fascinant.",
@@ -51,40 +128,33 @@ const declarations = [
     "{name} est ma variable constante dans un monde de variables."
 ];
 
-// --- 3. IMAGES (Fixes) ---
+// --- 3. IMAGES ---
 const imageCompliment = "./images/compliments.png"; 
 const imageInsulte    = "./images/insultes.png";
 const imageAmour      = "./images/amour.png";
 
-// --- 4. SÉLECTION DU DOM ---
-const resultContainer = document.getElementById('result-container'); // Conteneur global du résultat
-const loader = document.getElementById('loader'); // Le spinner
+// --- 4. DOM PRINCIPAL ---
+const resultContainer = document.getElementById('result-container');
+const loader = document.getElementById('loader');
 const outputText = document.getElementById('output-message');
 const outputImage = document.getElementById('output-image');
 
-// --- 5. FONCTION PRINCIPALE (Avec Loading State) ---
+
+// --- 5. GÉNÉRATION ---
 function lancerGeneration(listeTexte, cheminImage, couleurClasse) {
     
-    // ÉTAT 1 : CHARGEMENT
-    // On cache le résultat précédent et on montre le spinner
-    resultContainer.classList.add('opacity-0'); // Disparition douce
+    resultContainer.classList.add('opacity-0');
     loader.classList.remove('hidden');
 
-    // On attend 1.5 secondes (1500 ms) pour simuler le calcul de l'IA
     setTimeout(() => {
-        
-        // ÉTAT 2 : GÉNÉRATION DU RÉSULTAT
-        // 1. Choix du texte
         const indexTexte = Math.floor(Math.random() * listeTexte.length);
         let messageBrut = listeTexte[indexTexte];
-        
-        // 2. Remplacement du nom (Logique dynamique)
         const messageFinal = messageBrut.replace(/{name}/g, userName);
         
-        // 3. Mise à jour du DOM
         outputText.textContent = `"${messageFinal}"`;
-        outputText.className = `relative z-10 text-2xl md:text-3xl text-center font-medium transition-all duration-300 animate-fade-in ${couleurClasse}`;
-
+        // Plus besoin de toucher aux tailles ici
+        outputText.className = `relative z-10 text-center font-medium transition-all duration-300 animate-fade-in ${couleurClasse}`;
+        
         outputImage.src = cheminImage;
         outputImage.alt = "Résultat IA";
         outputImage.classList.remove('hidden');
@@ -92,15 +162,17 @@ function lancerGeneration(listeTexte, cheminImage, couleurClasse) {
         const couleurBorder = couleurClasse.replace('text', 'border');
         outputImage.className = `w-48 h-48 object-cover rounded-xl shadow-2xl border-2 relative z-10 animate-fade-in ${couleurBorder}`;
 
-        // ÉTAT 3 : AFFICHAGE
-        // On cache le loader et on réaffiche le conteneur
         loader.classList.add('hidden');
-        resultContainer.classList.remove('opacity-0'); // Réapparition douce
+        resultContainer.classList.remove('opacity-0');
 
-    }, 1500); // Fin du délai
+    }, 1500);
 }
 
-// --- 6. ÉCOUTEURS ---
+// --- 6. INITIALISATION ---
+// Appliquer les réglages sauvegardés au démarrage
+updateVisuals(savedScale, savedBold);
+
+// --- 7. ÉCOUTEURS BOUTONS APP ---
 document.getElementById('btn-compliment').addEventListener('click', () => {
     lancerGeneration(compliments, imageCompliment, 'text-emerald-400');
 });

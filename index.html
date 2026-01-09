@@ -19,13 +19,36 @@
 
     <div id="modal-settings" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center backdrop-blur-sm">
         <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 max-w-sm w-full shadow-2xl">
-            <h2 class="text-2xl font-bold mb-4 text-white">Configuration</h2>
-            <div class="mb-4">
-                <label class="block text-gray-400 text-sm mb-2">Ton Prénom (pour l'IA)</label>
+            <h2 class="text-2xl font-bold mb-6 text-white border-b border-gray-600 pb-2">Configuration</h2>
+            
+            <div class="mb-6">
+                <label class="block text-gray-400 text-sm mb-2 font-semibold">Ton Prénom</label>
                 <input type="text" id="input-name" placeholder="Ex: Thomas" 
                        class="w-full p-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:border-indigo-500 focus:outline-none transition-colors">
             </div>
-            <button id="btn-save-settings" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors">
+
+            <div class="mb-6">
+                <label class="block text-gray-400 text-sm mb-2 font-semibold">Taille du message</label>
+                
+                <div class="flex items-center justify-between bg-gray-900 p-2 rounded-lg border border-gray-600 mb-3">
+                    <button id="btn-decrease" class="w-10 h-10 flex items-center justify-center bg-gray-700 hover:bg-red-900/50 text-white rounded-lg transition-colors font-bold text-xl">
+                        -
+                    </button>
+                    
+                    <span id="display-percent" class="text-white font-mono text-lg font-bold">100%</span>
+                    
+                    <button id="btn-increase" class="w-10 h-10 flex items-center justify-center bg-gray-700 hover:bg-emerald-900/50 text-white rounded-lg transition-colors font-bold text-xl">
+                        +
+                    </button>
+                </div>
+
+                <label class="flex items-center space-x-3 cursor-pointer group">
+                    <input type="checkbox" id="check-bold" class="w-5 h-5 text-indigo-600 bg-gray-700 border-gray-500 rounded focus:ring-indigo-500 focus:ring-2">
+                    <span class="text-gray-300 group-hover:text-white transition-colors">Mettre le texte en <span class="font-bold">Gras</span></span>
+                </label>
+            </div>
+
+            <button id="btn-save-settings" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors shadow-lg shadow-indigo-500/30">
                 Sauvegarder
             </button>
         </div>
