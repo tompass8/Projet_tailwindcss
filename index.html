@@ -2,34 +2,107 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mon Projet Tailwind</title>
+    <title>Mon Projet Tailwind Interactif</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
 
-    <div class="w-full max-w-xl">
-    
-            <div class="flex space-x-4 justify-between p-8">
+<div class="w-full max-w-xl p-4">
 
-                <div class="bg-indigo-50 border-1-4 border-indigo-500 p-6 shadow-inner mt-8">
-                    <p id="output-message" class="text-xl text-center text-gray-600 italic font-medium"> le texte est la </p>
+    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-8 shadow-xl rounded-lg flex flex-col items-center gap-6">
 
-             <button id="btn-compliment" class="bg-green-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold
-                         hover:bg-green-600 hover:shadow-lg
-                        transition duration-300">Compliment</button>
+        <img id="avatar-img"
+             src="./images/neutral.png"
+             alt="Avatar"
+             class="w-48 h-48 rounded-full object-cover shadow-lg border-4 border-white transition-all duration-300">
 
-              <button id="btn-insulte" class="bg-red-500 text-white rounded-lg shadow-md py-3 px-12  text-lg font-semibold
-                    hover:bg-red-600 hover:shadow-lg
-                     transition duration-300">Insulte</button>
-   
-             <button id="btn-declaration" class ="bg-pink-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold
-                         hover:bg-pink-600 hover:shadow-lg
-                     transition duration-300">Declaration</button> 
-            </div>
-            </div>
+        <p id="output-message" class="text-xl text-center text-gray-600 italic font-medium min-h-[3rem]">
+            Clique sur un bouton pour voir ma réaction...
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4 w-full">
+
+            <button id="btn-compliment"
+                    class="bg-green-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold hover:bg-green-600 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                Compliment
+            </button>
+
+            <button id="btn-insulte"
+                    class="bg-red-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold hover:bg-red-600 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                Insulte
+            </button>
+
+            <button id="btn-declaration"
+                    class="bg-pink-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold hover:bg-pink-600 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                Déclaration
+            </button>
+        </div>
+
     </div>
-    
+</div>
+
+<script>
+    // 1. On récupère les éléments
+    const image = document.getElementById('avatar-img');
+    const message = document.getElementById('output-message');
+
+    const btnCompliment = document.getElementById('btn-compliment');
+    const btnInsulte = document.getElementById('btn-insulte');
+    const btnDeclaration = document.getElementById('btn-declaration');
+
+    // 2. CONFIGURATION DES IMAGES
+    // IMPORTANT : Si l'image ne change pas, c'est que le chemin ou le nom est faux ici.
+    const sources = {
+        neutre: "./images/neutral.png",
+        compliment: "./images/happy_off.png",
+        insulte: "./images/angry_off.png",
+        declaration: "./images/love_off.png"
+    };
+
+    // Fonction pour remettre l'image neutre quand la souris part
+    function resetImage() {
+        image.src = sources.neutre;
+        // On NE touche PAS au message ici !
+    }
+
+    // --- BOUTON COMPLIMENT ---
+
+    // Survol : Change l'image
+    btnCompliment.addEventListener('mouseenter', () => {
+        image.src = sources.compliment;
+    });
+    // Sortie : Remet l'image neutre
+    btnCompliment.addEventListener('mouseleave', resetImage);
+    // Clic : Change le message (et le garde)
+    btnCompliment.addEventListener('click', () => {
+        message.textContent = "Oh merci, c'est gentil !";
+        message.className = "text-xl text-center text-green-600 font-bold min-h-[3rem]";
+    });
+
+
+    // --- BOUTON INSULTE ---
+
+    btnInsulte.addEventListener('mouseenter', () => {
+        image.src = sources.insulte;
+    });
+    btnInsulte.addEventListener('mouseleave', resetImage);
+    btnInsulte.addEventListener('click', () => {
+        message.textContent = "Hé ! Pourquoi tant de haine ?";
+        message.className = "text-xl text-center text-red-600 font-bold min-h-[3rem]";
+    });
+
+
+    // --- BOUTON DECLARATION ---
+
+    btnDeclaration.addEventListener('mouseenter', () => {
+        image.src = sources.declaration;
+    });
+    btnDeclaration.addEventListener('mouseleave', resetImage);
+    btnDeclaration.addEventListener('click', () => {
+        message.textContent = "C'est vrai ? Je t'aime aussi ❤️";
+        message.className = "text-xl text-center text-pink-600 font-bold min-h-[3rem]";
+    });
+
+</script>
 </body>
 </html>
-
-<link href="./output.css" rel="stylesheet">
