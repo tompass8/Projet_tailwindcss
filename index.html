@@ -2,107 +2,158 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mon Projet Tailwind Interactif</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet Interactif - États On/Off</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        #zoom-container {
+            transition: transform 0.2s ease-out;
+            transform-origin: top center;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<body class="bg-gray-100 min-h-screen flex flex-col items-center pt-10 overflow-x-hidden">
 
-<div class="w-full max-w-xl p-4">
+<div class="fixed top-4 right-4 bg-white p-2 rounded-lg shadow-lg flex items-center gap-2 z-50 border border-gray-200">
+    <span class="text-xs font-bold text-gray-500 uppercase mr-1">Zoom</span>
+    <button onclick="changeZoom(-0.1)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-3 rounded text-sm">-</button>
+    <span id="zoom-display" class="text-sm font-mono w-12 text-center">100%</span>
+    <button onclick="changeZoom(0.1)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-3 rounded text-sm">+</button>
+    <button onclick="resetZoom()" class="text-xs text-blue-500 hover:underline ml-1">Reset</button>
+</div>
 
-    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-8 shadow-xl rounded-lg flex flex-col items-center gap-6">
+<div id="zoom-container" class="w-full flex justify-center px-4">
 
-        <img id="avatar-img"
-             src="./images/neutral.png"
-             alt="Avatar"
-             class="w-48 h-48 rounded-full object-cover shadow-lg border-4 border-white transition-all duration-300">
+    <div class="w-full max-w-xl">
+        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-6 sm:p-8 shadow-xl rounded-lg flex flex-col items-center gap-6">
 
-        <p id="output-message" class="text-xl text-center text-gray-600 italic font-medium min-h-[3rem]">
-            Clique sur un bouton pour voir ma réaction...
-        </p>
+            <img id="avatar-img"
+                 src="./images/neutral.png"
+                 alt="Avatar"
+                 class="w-32 h-32 sm:w-48 sm:h-48 rounded-full object-cover shadow-lg border-4 border-white transition-all duration-300">
 
-        <div class="flex flex-wrap justify-center gap-4 w-full">
+            <p id="output-message" class="text-lg sm:text-xl text-center text-gray-600 italic font-medium min-h-[3rem] px-2">
+                Clique sur un bouton pour voir ma réaction...
+            </p>
 
-            <button id="btn-compliment"
-                    class="bg-green-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold hover:bg-green-600 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
-                Compliment
-            </button>
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 w-full">
+                <button id="btn-compliment" class="w-full sm:w-auto bg-green-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold hover:bg-green-600 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">Compliment</button>
+                <button id="btn-insulte" class="w-full sm:w-auto bg-red-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold hover:bg-red-600 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">Insulte</button>
+                <button id="btn-declaration" class="w-full sm:w-auto bg-pink-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold hover:bg-pink-600 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">Déclaration</button>
+            </div>
 
-            <button id="btn-insulte"
-                    class="bg-red-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold hover:bg-red-600 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
-                Insulte
-            </button>
-
-            <button id="btn-declaration"
-                    class="bg-pink-500 text-white rounded-lg shadow-md py-3 px-6 text-lg font-semibold hover:bg-pink-600 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
-                Déclaration
-            </button>
         </div>
-
     </div>
 </div>
 
 <script>
-    // 1. On récupère les éléments
+    // --- VARIABLES ---
     const image = document.getElementById('avatar-img');
     const message = document.getElementById('output-message');
 
-    const btnCompliment = document.getElementById('btn-compliment');
-    const btnInsulte = document.getElementById('btn-insulte');
-    const btnDeclaration = document.getElementById('btn-declaration');
+    // On garde en mémoire quel est l'état actuel validé (cliqué)
+    // Au début, c'est 'neutre'
+    let etatValide = 'neutre';
 
-    // 2. CONFIGURATION DES IMAGES
-    // IMPORTANT : Si l'image ne change pas, c'est que le chemin ou le nom est faux ici.
+    // Configuration des images avec les deux états (off = survol, on = clic)
     const sources = {
         neutre: "./images/neutral.png",
-        compliment: "./images/happy_off.png",
-        insulte: "./images/angry_off.png",
-        declaration: "./images/love_off.png"
+        compliment: {
+            off: "./images/happy_off.png",
+            on: "./images/happy_on.png"
+        },
+        insulte: {
+            off: "./images/angry_off.png",
+            on: "./images/angry_on.png"
+        },
+        declaration: {
+            off: "./images/love_off.png",
+            on: "./images/love_on.png"
+        }
     };
 
-    // Fonction pour remettre l'image neutre quand la souris part
-    function resetImage() {
-        image.src = sources.neutre;
-        // On NE touche PAS au message ici !
+    // --- FONCTION INTELLIGENTE DE RETOUR ---
+    // Quand la souris part d'un bouton, on doit décider quelle image afficher.
+    // Si on a déjà cliqué sur quelque chose (ex: compliment), on réaffiche le "compliment on".
+    // Sinon, on remet l'image neutre.
+    function restoreState() {
+        if (etatValide === 'neutre') {
+            image.src = sources.neutre;
+        } else {
+            // Si l'état validé est 'compliment', on remet l'image 'compliment.on'
+            image.src = sources[etatValide].on;
+        }
     }
 
     // --- BOUTON COMPLIMENT ---
+    const btnCompliment = document.getElementById('btn-compliment');
 
-    // Survol : Change l'image
+    // Survol : On montre la version OFF (Happy Off)
     btnCompliment.addEventListener('mouseenter', () => {
-        image.src = sources.compliment;
+        image.src = sources.compliment.off;
     });
-    // Sortie : Remet l'image neutre
-    btnCompliment.addEventListener('mouseleave', resetImage);
-    // Clic : Change le message (et le garde)
+
+    // Sortie : On restaure l'état précédent
+    btnCompliment.addEventListener('mouseleave', restoreState);
+
+    // Clic : On valide l'état et on montre la version ON (Happy On)
     btnCompliment.addEventListener('click', () => {
+        etatValide = 'compliment'; // On mémorise que c'est l'état actif
+        image.src = sources.compliment.on;
         message.textContent = "Oh merci, c'est gentil !";
-        message.className = "text-xl text-center text-green-600 font-bold min-h-[3rem]";
+        message.className = "text-lg sm:text-xl text-center text-green-600 font-bold min-h-[3rem] px-2";
     });
 
 
     // --- BOUTON INSULTE ---
+    const btnInsulte = document.getElementById('btn-insulte');
 
     btnInsulte.addEventListener('mouseenter', () => {
-        image.src = sources.insulte;
+        image.src = sources.insulte.off;
     });
-    btnInsulte.addEventListener('mouseleave', resetImage);
+    btnInsulte.addEventListener('mouseleave', restoreState);
     btnInsulte.addEventListener('click', () => {
+        etatValide = 'insulte';
+        image.src = sources.insulte.on;
         message.textContent = "Hé ! Pourquoi tant de haine ?";
-        message.className = "text-xl text-center text-red-600 font-bold min-h-[3rem]";
+        message.className = "text-lg sm:text-xl text-center text-red-600 font-bold min-h-[3rem] px-2";
     });
 
 
     // --- BOUTON DECLARATION ---
+    const btnDeclaration = document.getElementById('btn-declaration');
 
     btnDeclaration.addEventListener('mouseenter', () => {
-        image.src = sources.declaration;
+        image.src = sources.declaration.off;
     });
-    btnDeclaration.addEventListener('mouseleave', resetImage);
+    btnDeclaration.addEventListener('mouseleave', restoreState);
     btnDeclaration.addEventListener('click', () => {
+        etatValide = 'declaration';
+        image.src = sources.declaration.on;
         message.textContent = "C'est vrai ? Je t'aime aussi ❤️";
-        message.className = "text-xl text-center text-pink-600 font-bold min-h-[3rem]";
+        message.className = "text-lg sm:text-xl text-center text-pink-600 font-bold min-h-[3rem] px-2";
     });
 
+
+    // --- LOGIQUE ZOOM (Inchunadgée) ---
+    let currentZoom = 1;
+    const zoomContainer = document.getElementById('zoom-container');
+    const zoomDisplay = document.getElementById('zoom-display');
+
+    function changeZoom(amount) {
+        currentZoom += amount;
+        if (currentZoom < 0.5) currentZoom = 0.5;
+        if (currentZoom > 2.0) currentZoom = 2.0;
+        applyZoom();
+    }
+    function resetZoom() {
+        currentZoom = 1;
+        applyZoom();
+    }
+    function applyZoom() {
+        zoomContainer.style.transform = `scale(${currentZoom})`;
+        zoomDisplay.textContent = Math.round(currentZoom * 100) + "%";
+    }
 </script>
 </body>
 </html>
