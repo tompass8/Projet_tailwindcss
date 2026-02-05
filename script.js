@@ -36,7 +36,7 @@ function restoreState() {
 }
 
 // Fonction générique pour gérer les interactions (évite la répétition)
-function handleInteraction(btnId, type, text, colorClass, ringClass) {
+function handleInteraction(btnId, type, textOrFn, colorClass, ringClass) {
     const btn = document.getElementById(btnId);
 
     btn.addEventListener('mouseenter', () => {
@@ -51,6 +51,7 @@ function handleInteraction(btnId, type, text, colorClass, ringClass) {
         image.src = sources[type].on;
         image.alt = sources[type].alt; // Mise à jour importante pour les aveugles
 
+        const text = typeof textOrFn === 'function' ? textOrFn() : textOrFn;
         message.textContent = text;
         // On utilise des couleurs plus foncées (700) pour le contraste texte
         message.className = `text-2xl text-center ${colorClass} font-bold min-h-[4rem] flex items-center justify-center px-2 drop-shadow-sm`;
@@ -69,11 +70,27 @@ async function initInteractions() {
             throw new Error('Format JSON invalide: buttons manquant');
         }
 
+        const textPools = {};
+        const nextText = (type, texts, fallback) => {
+            const pool = textPools[type];
+            if (!pool || pool.length === 0) {
+                const source = Array.isArray(texts) && texts.length > 0 ? texts : [fallback];
+                const shuffled = source.slice();
+                for (let i = shuffled.length - 1; i > 0; i -= 1) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                textPools[type] = shuffled;
+            }
+            return textPools[type].pop();
+        };
+
         data.buttons.forEach((btn) => {
-            handleInteraction(btn.id, btn.type, btn.text, btn.colorClass);
+            const getText = () => nextText(btn.type, btn.texts, btn.text);
+            handleInteraction(btn.id, btn.type, getText, btn.colorClass);
         });
     } catch (error) {
-        // Fallback si le JSON n'est pas charge (ex: ouverture en file://)
+        // Fallback si le JSON n'est pas chargeable ou mal formaté
         handleInteraction('btn-compliment', 'compliment', "Oh merci, c'est gentil !", "text-green-700");
         handleInteraction('btn-insulte', 'insulte', "Hé ! Pourquoi tant de haine ?", "text-red-700");
         handleInteraction('btn-declaration', 'declaration', "C'est vrai ? Je t'aime aussi ❤️", "text-pink-700");
