@@ -14,11 +14,11 @@ function handleGeneration(list, imgPath, color) {
 }
 
 // --- ÉVÉNEMENTS BOUTONS PRINCIPAUX ---
-document.getElementById('btn-compliment').addEventListener('click', () => 
+DOM.COMPLIMENTS.addEventListener('click', () => 
     handleGeneration(COMPLIMENTS, IMAGES_PATHS.compliment, 'text-emerald-400'));
 
-document.getElementById('btn-insulte').addEventListener('click', () => 
+DOM.INSULTES.addEventListener('click', () => 
     handleGeneration(INSULTES, IMAGES_PATHS.insulte, 'text-red-500'));
 
-document.getElementById('btn-declaration').addEventListener('click', () => 
+DOM.DECLARATIONS.addEventListener('click', () => 
     handleGeneration(DECLARATIONS, IMAGES_PATHS.amour, 'text-pink-500'));

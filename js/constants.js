@@ -1,3 +1,5 @@
+import { COMPLIMENTS, DECLARATIONS } from "./data";
+
 export const DOM = {
     BTN_SETTINGS: document.getElementById('btn-settings'),
     MODAL_SETTINGS: document.getElementById('modal-settings'),
@@ -10,5 +12,9 @@ export const DOM = {
     RESULT_CONTAINER: document.getElementById('result-container'),
     LOADER: document.getElementById('loader'),
     OUTPUT_TEXT: document.getElementById('output-message'),
-    OUTPUT_IMAGE: document.getElementById('output-image')
+    OUTPUT_IMAGE: document.getElementById('output-image'),
+
+    COMPLIMENTS: document.getElementById('btn-compliment'),
+    INSULTES: document.getElementById('btn-insulte'),
+    DECLARATIONS: document.getElementById('btn-declaration'),
 };
