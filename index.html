@@ -3,127 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projet Interactif - Fond Animé</title>
+    <title>Projet Interactif - Accessible</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Animation pour le zoom */
-        #zoom-container {
-            transition: transform 0.2s ease-out;
-            transform-origin: top center;
-        }
-
-        /* --- NOUVEAU : Animation des bulles d'arrière-plan --- */
         @keyframes blob {
             0% { transform: translate(0px, 0px) scale(1); }
             33% { transform: translate(30px, -50px) scale(1.1); }
             66% { transform: translate(-20px, 20px) scale(0.9); }
             100% { transform: translate(0px, 0px) scale(1); }
         }
-        .animate-blob {
-            animation: blob 7s infinite;
+
+
+        @media (prefers-reduced-motion: no-preference) {
+            .animate-blob { animation: blob 7s infinite; }
         }
-        .animation-delay-2000 {
-            animation-delay: 2s;
+
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
+
+        .btn-super-hover {
+            transition: all 0.3s ease-in-out;
         }
-        .animation-delay-4000 {
-            animation-delay: 4s;
+
+        @media (prefers-reduced-motion: no-preference) {
+            .btn-super-hover:hover {
+                transform: translateY(-5px);
+            }
+        }
+
+        .btn-super-hover:hover {
+            filter: brightness(0.85);
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.6);
+        }
+
+        button:focus-visible {
+            outline: 2px solid #2563EB;
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 640px) {
+            #avatar-img {
+                width: 70vw !important;
+                height: 70vw !important;
+                max-width: 280px;
+                max-height: 280px;
+            }
+            #output-message {
+                font-size: 1.5rem !important;
+                line-height: 2rem;
+            }
+            .btn-super-hover {
+                padding-top: 16px;
+                padding-bottom: 16px;
+                font-size: 1.25rem;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col items-center pt-10 overflow-hidden relative selection:bg-pink-200">
 
-<div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+<body class="bg-gray-50 min-h-screen flex flex-col items-center pt-10 overflow-auto relative selection:bg-pink-200 text-gray-900">
+
+<div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none" aria-hidden="true">
     <div class="absolute top-0 left-1/4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
     <div class="absolute top-0 right-1/4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
     <div class="absolute -bottom-8 left-1/3 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
 </div>
 
-<div class="fixed top-4 right-4 bg-white/80 backdrop-blur-sm p-2 rounded-lg shadow-lg flex items-center gap-2 z-50 border border-white/50">
-    <span class="text-xs font-bold text-gray-500 uppercase mr-1">Zoom</span>
-    <button onclick="changeZoom(-0.1)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-3 rounded text-sm">-</button>
-    <span id="zoom-display" class="text-sm font-mono w-12 text-center">100%</span>
-    <button onclick="changeZoom(0.1)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-3 rounded text-sm">+</button>
-    <button onclick="resetZoom()" class="text-xs text-blue-500 hover:underline ml-1">Reset</button>
-</div>
+<nav role="region" aria-label="Contrôle du zoom" class="fixed top-2 right-2 sm:top-4 sm:right-4 bg-white/95 backdrop-blur-md p-2 rounded-lg shadow-lg flex items-center gap-2 z-50 border border-gray-200/50 scale-90 sm:scale-100 origin-top-right">
+    <span class="text-xs font-bold text-gray-600 uppercase mr-1 hidden sm:inline" id="zoom-label">Zoom</span>
 
-<div id="zoom-container" class="w-full flex justify-center px-4 relative z-10">
+    <button onclick="changeZoom(-0.1)" aria-label="Réduire le zoom" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-1 px-3 rounded text-sm min-w-[30px]">-</button>
 
-    <div class="w-full max-w-xl">
-        <div class="bg-white/60 backdrop-blur-md border border-white/40 p-6 sm:p-8 shadow-2xl rounded-2xl flex flex-col items-center gap-6">
+    <span id="zoom-display" aria-live="polite" class="text-sm font-mono w-10 text-center text-gray-800">100%</span>
+
+    <button onclick="changeZoom(0.1)" aria-label="Augmenter le zoom" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-1 px-3 rounded text-sm min-w-[30px]">+</button>
+    <button onclick="resetZoom()" aria-label="Réinitialiser le zoom" class="text-xs text-blue-700 hover:underline ml-1 p-1">↺</button>
+</nav>
+
+<main id="zoom-container" class="w-full flex justify-center px-4 mb-32 relative z-10">
+
+    <div class="w-full max-w-xl mt-8 sm:mt-0">
+        <div class="bg-white/80 backdrop-blur-md border border-white/40 p-4 sm:p-8 shadow-2xl rounded-2xl flex flex-col items-center gap-6">
 
             <img id="avatar-img"
                  src="./images/neutral.png"
-                 alt="Avatar"
-                 class="w-32 h-32 sm:w-48 sm:h-48 rounded-full object-cover shadow-lg border-4 border-white transition-all duration-300">
+                 alt="Personnage avec une expression neutre"
+                 class="w-64 h-64 rounded-full object-cover shadow-lg border-4 border-white transition-all duration-300">
 
-            <p id="output-message" class="text-lg sm:text-xl text-center text-gray-700 italic font-medium min-h-[3rem] px-2 drop-shadow-sm">
+            <p id="output-message"
+               aria-live="polite"
+               class="text-2xl text-center text-gray-800 italic font-medium min-h-[4rem] flex items-center justify-center px-2 drop-shadow-sm">
                 Clique sur un bouton pour voir ma réaction...
             </p>
 
-            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 w-full">
-                <button id="btn-compliment" class="w-full sm:w-auto bg-green-500 text-white rounded-lg shadow-lg py-3 px-6 text-lg font-semibold hover:bg-green-600 hover:shadow-xl transition duration-300 transform hover:-translate-y-1">Compliment</button>
-                <button id="btn-insulte" class="w-full sm:w-auto bg-red-500 text-white rounded-lg shadow-lg py-3 px-6 text-lg font-semibold hover:bg-red-600 hover:shadow-xl transition duration-300 transform hover:-translate-y-1">Insulte</button>
-                <button id="btn-declaration" class="w-full sm:w-auto bg-pink-500 text-white rounded-lg shadow-lg py-3 px-6 text-lg font-semibold hover:bg-pink-600 hover:shadow-xl transition duration-300 transform hover:-translate-y-1">Déclaration</button>
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 w-full">
+
+                <button id="btn-compliment" class="btn-super-hover active:scale-95 w-full sm:w-auto bg-green-600 text-white rounded-lg shadow-lg py-3 px-6 text-lg font-semibold focus:ring-4 focus:ring-green-300">
+                    Compliment
+                </button>
+
+                <button id="btn-insulte" class="btn-super-hover active:scale-95 w-full sm:w-auto bg-red-600 text-white rounded-lg shadow-lg py-3 px-6 text-lg font-semibold focus:ring-4 focus:ring-red-300">
+                    Insulte
+                </button>
+
+                <button id="btn-declaration" class="btn-super-hover active:scale-95 w-full sm:w-auto bg-pink-600 text-white rounded-lg shadow-lg py-3 px-6 text-lg font-semibold focus:ring-4 focus:ring-pink-300">
+                    Déclaration
+                </button>
+
             </div>
 
         </div>
     </div>
-</div>
+</main>
 
 <script>
-    // --- VARIABLES ---
     const image = document.getElementById('avatar-img');
     const message = document.getElementById('output-message');
-
     let etatValide = 'neutre';
 
+    // Structure de données enrichie avec le texte Alt pour l'accessibilité
     const sources = {
-        neutre: "./images/neutral.png",
-        compliment: { off: "./images/happy_off.png", on: "./images/happy_on.png" },
-        insulte: { off: "./images/angry_off.png", on: "./images/angry_on.png" },
-        declaration: { off: "./images/love_off.png", on: "./images/love_on.png" }
+        neutre: {
+            src: "./images/neutral.png",
+            alt: "Personnage avec une expression neutre"
+        },
+        compliment: {
+            off: "./images/happy_off.png",
+            on: "./images/happy_on.png",
+            alt: "Personnage souriant et joyeux"
+        },
+        insulte: {
+            off: "./images/angry_off.png",
+            on: "./images/angry_on.png",
+            alt: "Personnage en colère avec les sourcils froncés"
+        },
+        declaration: {
+            off: "./images/love_off.png",
+            on: "./images/love_on.png",
+            alt: "Personnage amoureux avec des coeurs dans les yeux"
+        }
     };
 
     function restoreState() {
         if (etatValide === 'neutre') {
-            image.src = sources.neutre;
+            image.src = sources.neutre.src;
+            image.alt = sources.neutre.alt;
         } else {
             image.src = sources[etatValide].on;
+            image.alt = sources[etatValide].alt;
         }
     }
 
-    // --- BOUTON COMPLIMENT ---
-    const btnCompliment = document.getElementById('btn-compliment');
-    btnCompliment.addEventListener('mouseenter', () => image.src = sources.compliment.off);
-    btnCompliment.addEventListener('mouseleave', restoreState);
-    btnCompliment.addEventListener('click', () => {
-        etatValide = 'compliment';
-        image.src = sources.compliment.on;
-        message.textContent = "Oh merci, c'est gentil !";
-        message.className = "text-lg sm:text-xl text-center text-green-600 font-bold min-h-[3rem] px-2 drop-shadow-sm";
-    });
+    // Fonction générique pour gérer les interactions (évite la répétition)
+    function handleInteraction(btnId, type, text, colorClass, ringClass) {
+        const btn = document.getElementById(btnId);
 
-    // --- BOUTON INSULTE ---
-    const btnInsulte = document.getElementById('btn-insulte');
-    btnInsulte.addEventListener('mouseenter', () => image.src = sources.insulte.off);
-    btnInsulte.addEventListener('mouseleave', restoreState);
-    btnInsulte.addEventListener('click', () => {
-        etatValide = 'insulte';
-        image.src = sources.insulte.on;
-        message.textContent = "Hé ! Pourquoi tant de haine ?";
-        message.className = "text-lg sm:text-xl text-center text-red-600 font-bold min-h-[3rem] px-2 drop-shadow-sm";
-    });
+        btn.addEventListener('mouseenter', () => {
+            image.src = sources[type].off;
+            image.alt = sources[type].alt + " (aperçu)";
+        });
 
-    // --- BOUTON DECLARATION ---
-    const btnDeclaration = document.getElementById('btn-declaration');
-    btnDeclaration.addEventListener('mouseenter', () => image.src = sources.declaration.off);
-    btnDeclaration.addEventListener('mouseleave', restoreState);
-    btnDeclaration.addEventListener('click', () => {
-        etatValide = 'declaration';
-        image.src = sources.declaration.on;
-        message.textContent = "C'est vrai ? Je t'aime aussi ❤️";
-        message.className = "text-lg sm:text-xl text-center text-pink-600 font-bold min-h-[3rem] px-2 drop-shadow-sm";
-    });
+        btn.addEventListener('mouseleave', restoreState);
+
+        btn.addEventListener('click', () => {
+            etatValide = type;
+            image.src = sources[type].on;
+            image.alt = sources[type].alt; // Mise à jour importante pour les aveugles
+
+            message.textContent = text;
+            // On utilise des couleurs plus foncées (700) pour le contraste texte
+            message.className = `text-2xl text-center ${colorClass} font-bold min-h-[4rem] flex items-center justify-center px-2 drop-shadow-sm`;
+        });
+    }
+
+    // Appel des fonctions avec des couleurs ajustées pour le contraste (700 au lieu de 600/500)
+    handleInteraction('btn-compliment', 'compliment', "Oh merci, c'est gentil !", "text-green-700");
+    handleInteraction('btn-insulte', 'insulte', "Hé ! Pourquoi tant de haine ?", "text-red-700");
+    handleInteraction('btn-declaration', 'declaration', "C'est vrai ? Je t'aime aussi ❤️", "text-pink-700");
+
 
     // --- LOGIQUE ZOOM ---
     let currentZoom = 1;
@@ -141,7 +198,7 @@
         applyZoom();
     }
     function applyZoom() {
-        zoomContainer.style.transform = `scale(${currentZoom})`;
+        zoomContainer.style.zoom = currentZoom;
         zoomDisplay.textContent = Math.round(currentZoom * 100) + "%";
     }
 </script>
