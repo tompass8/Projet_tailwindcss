@@ -57,10 +57,32 @@ function handleInteraction(btnId, type, text, colorClass, ringClass) {
     });
 }
 
-// Appel des fonctions avec des couleurs ajustées pour le contraste (700 au lieu de 600/500)
-handleInteraction('btn-compliment', 'compliment', "Oh merci, c'est gentil !", "text-green-700");
-handleInteraction('btn-insulte', 'insulte', "Hé ! Pourquoi tant de haine ?", "text-red-700");
-handleInteraction('btn-declaration', 'declaration', "C'est vrai ? Je t'aime aussi ❤️", "text-pink-700");
+async function initInteractions() {
+    try {
+        const response = await fetch('./responses.json');
+        if (!response.ok) {
+            throw new Error(`Erreur chargement JSON: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (!Array.isArray(data.buttons)) {
+            throw new Error('Format JSON invalide: buttons manquant');
+        }
+
+        data.buttons.forEach((btn) => {
+            handleInteraction(btn.id, btn.type, btn.text, btn.colorClass);
+        });
+    } catch (error) {
+        // Fallback si le JSON n'est pas charge (ex: ouverture en file://)
+        handleInteraction('btn-compliment', 'compliment', "Oh merci, c'est gentil !", "text-green-700");
+        handleInteraction('btn-insulte', 'insulte', "Hé ! Pourquoi tant de haine ?", "text-red-700");
+        handleInteraction('btn-declaration', 'declaration', "C'est vrai ? Je t'aime aussi ❤️", "text-pink-700");
+        console.error(error);
+    }
+}
+
+// Appel des fonctions via JSON
+initInteractions();
 
 
 // Gestion du Zoom

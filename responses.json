@@ -1,0 +1,22 @@
+{
+  "buttons": [
+    {
+      "id": "btn-compliment",
+      "type": "compliment",
+      "text": "Oh merci, c'est gentil !",
+      "colorClass": "text-green-700"
+    },
+    {
+      "id": "btn-insulte",
+      "type": "insulte",
+      "text": "Hé ! Pourquoi tant de haine ?",
+      "colorClass": "text-red-700"
+    },
+    {
+      "id": "btn-declaration",
+      "type": "declaration",
+      "text": "C'est vrai ? Je t'aime aussi ❤️",
+      "colorClass": "text-pink-700"
+    }
+  ]
+}
