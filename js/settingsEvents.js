@@ -1,15 +1,15 @@
-import { DOM, STATE } from './constants.js';
-import { saveName, saveSettings } from './state.js';
+import { DOM } from './constants.js';
+import { state, saveName, saveSettings } from './state.js';
 import { updateVisuals } from './ui.js';
 
 export function initSettingsEvents(dom) {
-    let tempScale = STATE.scale;
-    let tempBold = STATE.isBold;
+    let tempScale = state.scale;
+    let tempBold = state.isBold;
 
     DOM.BTN_SETTINGS.addEventListener('click', () => {
-        DOM.INPUT_NAME.value = STATE.name === "Humain" ? "" : STATE.name;
-        tempScale = STATE.scale;
-        tempBold = STATE.isBold;
+        DOM.INPUT_NAME.value = state.name === "Humain" ? "" : state.name;
+        tempScale = state.scale;
+        tempBold = state.isBold;
         updateVisuals(tempScale, tempBold, DOM);
         DOM.MODAL_SETTINGS.classList.remove('hidden');
     });
