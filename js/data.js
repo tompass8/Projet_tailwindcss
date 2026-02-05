@@ -1,5 +1,4 @@
-// Export des listes de textes
-export const compliments = [
+export const COMPLIMENTS = [
     "{name}, ton code est aussi propre que de l'eau de roche.",
     "{name}, tu as une logique imparable, c'est fascinant.",
     "Le sourire de {name} pourrait débugger n'importe quel programme.",
@@ -7,7 +6,7 @@ export const compliments = [
     "{name}, tu es la version 2.0 de l'humanité."
 ];
 
-export const insultes = [
+export const INSULTES = [
     "{name}, tu es aussi utile qu'une balise <br> dans un JSON.",
     "L'intelligence de {name} est restée au stade artificiel.",
     "Même Internet Explorer va plus vite que {name}.",
@@ -15,7 +14,7 @@ export const insultes = [
     "J'ai vu des fichiers CSV avec plus de personnalité que {name}."
 ];
 
-export const declarations = [
+export const DECLARATIONS = [
     "{name}, mon cœur bat à 120 FPS quand je te vois.",
     "Tu es le CSS qui donne du style à ma vie, {name}.",
     "Je voudrais faire un git push de mon amour vers le cœur de {name}.",
@@ -23,8 +22,7 @@ export const declarations = [
     "{name} est ma variable constante dans un monde de variables."
 ];
 
-// Export des chemins d'images (Attention aux nouveaux chemins !)
-export const imagesPaths = {
+export const IMAGES_PATHS = {
     compliment: "./assets/images/compliments.png",
     insulte: "./assets/images/insultes.png",
     amour: "./assets/images/amour.png"

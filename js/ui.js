@@ -1,15 +1,3 @@
-// --- Injection du Style "Radical" ---
-const styleTag = document.createElement('style');
-styleTag.innerHTML = `
-    .mode-ultra-gras, .mode-ultra-gras * {
-        font-family: 'Arial Black', 'Inter', sans-serif !important;
-        font-weight: 900 !important;
-        text-shadow: 0 0 1px currentColor !important;
-        letter-spacing: 0.5px !important;
-    }
-`;
-document.head.appendChild(styleTag);
-
 // --- Fonctions Visuelles ---
 export function updateVisuals(scale, isBold, domElements) {
     // Zoom
@@ -23,33 +11,38 @@ export function updateVisuals(scale, isBold, domElements) {
     }
 
     // Mise à jour textes modale
-    if(domElements.displayPercent) domElements.displayPercent.textContent = scale + "%";
-    if(domElements.checkBold) domElements.checkBold.checked = isBold;
+    if(domElements.DISPLAY_PERCENT) domElements.DISPLAY_PERCENT.textContent = scale + "%";
+    if(domElements.CHECK_BOLD) domElements.CHECK_BOLD.checked = isBold;
 }
 
 // --- Animation de génération ---
 export function showResult(text, imagePath, colorClass, domElements) {
-    const { resultContainer, loader, outputText, outputImage } = domElements;
+    const { 
+        RESULT_CONTAINER, 
+        LOADER, 
+        OUTPUT_TEXT, 
+        OUTPUT_IMAGE 
+    } = domElements;
 
     // Start Loader
-    resultContainer.classList.add('opacity-0');
-    loader.classList.remove('hidden');
+    RESULT_CONTAINER.classList.add('opacity-0');
+    LOADER.classList.remove('hidden');
 
     setTimeout(() => {
         // Update Texte
-        outputText.textContent = `"${text}"`;
-        outputText.className = `relative z-10 text-center font-medium transition-all duration-300 animate-fade-in ${colorClass}`;
+        OUTPUT_TEXT.textContent = `"${text}"`;
+        OUTPUT_TEXT.className = `relative z-10 text-center font-medium transition-all duration-300 animate-fade-in ${colorClass}`;
         
         // Update Image
-        outputImage.src = imagePath;
-        outputImage.alt = "Résultat IA";
-        outputImage.classList.remove('hidden');
+        OUTPUT_IMAGE.src = imagePath;
+        OUTPUT_IMAGE.alt = "Résultat IA";
+        OUTPUT_IMAGE.classList.remove('hidden');
         
-        const borderColor = colorClass.replace('text', 'border');
-        outputImage.className = `w-48 h-48 object-cover rounded-xl shadow-2xl border-2 relative z-10 animate-fade-in ${borderColor}`;
+        const BORDER_COLOR = colorClass.replace('text', 'border');
+        OUTPUT_IMAGE.className = `w-48 h-48 object-cover rounded-xl shadow-2xl border-2 relative z-10 animate-fade-in ${BORDER_COLOR}`;
 
         // Stop Loader
-        loader.classList.add('hidden');
-        resultContainer.classList.remove('opacity-0');
+        LOADER.classList.add('hidden');
+        RESULT_CONTAINER.classList.remove('opacity-0');
     }, 1500);
 }

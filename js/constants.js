@@ -1,14 +1,14 @@
-export const dom = {
-    btnSettings: document.getElementById('btn-settings'),
-    modalSettings: document.getElementById('modal-settings'),
-    btnSave: document.getElementById('btn-save-settings'),
-    inputName: document.getElementById('input-name'),
-    btnDecrease: document.getElementById('btn-decrease'),
-    btnIncrease: document.getElementById('btn-increase'),
-    displayPercent: document.getElementById('display-percent'),
-    checkBold: document.getElementById('check-bold'),
-    resultContainer: document.getElementById('result-container'),
-    loader: document.getElementById('loader'),
-    outputText: document.getElementById('output-message'),
-    outputImage: document.getElementById('output-image')
+export const DOM = {
+    BTN_SETTINGS: document.getElementById('btn-settings'),
+    MODAL_SETTINGS: document.getElementById('modal-settings'),
+    BTN_SAVE: document.getElementById('btn-save-settings'),
+    INPUT_NAME: document.getElementById('input-name'),
+    BTN_DECREASE: document.getElementById('btn-decrease'),
+    BTN_INCREASE: document.getElementById('btn-increase'),
+    DISPLAY_PERCENT: document.getElementById('display-percent'),
+    CHECK_BOLD: document.getElementById('check-bold'),
+    RESULT_CONTAINER: document.getElementById('result-container'),
+    LOADER: document.getElementById('loader'),
+    OUTPUT_TEXT: document.getElementById('output-message'),
+    OUTPUT_IMAGE: document.getElementById('output-image')
 };
