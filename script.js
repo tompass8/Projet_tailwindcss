@@ -91,9 +91,9 @@ async function initInteractions() {
         });
     } catch (error) {
         // Fallback si le JSON n'est pas chargeable ou mal formaté
-        handleInteraction('btn-compliment', 'compliment', "Oh merci, c'est gentil !", "text-green-700");
-        handleInteraction('btn-insulte', 'insulte', "Hé ! Pourquoi tant de haine ?", "text-red-700");
-        handleInteraction('btn-declaration', 'declaration', "C'est vrai ? Je t'aime aussi ❤️", "text-pink-700");
+        handleInteraction('btn-compliment', 'compliment', "Oh merci, c'est gentil ! Mais c'est moi qui doit te complimenter.", "text-green-700");
+        handleInteraction('btn-insulte', 'insulte', "Hé ! Pourquoi tant de haine ? Laisse-moi t'insulter gentiment en retour !", "text-red-700");
+        handleInteraction('btn-declaration', 'declaration', "C'est vrai ? Je t'aime aussi ! Mais laisse moi te le dire autrement.", "text-pink-700");
         console.error(error);
     }
 }
