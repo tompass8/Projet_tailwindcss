@@ -1,22 +1,7 @@
 import { compliments, insultes, declarations, imagesPaths } from './data.js';
 import { state, saveName, saveSettings } from './state.js';
 import { updateVisuals, showResult } from './ui.js';
-
-// --- SÉLECTION DU DOM ---
-const dom = {
-    btnSettings: document.getElementById('btn-settings'),
-    modalSettings: document.getElementById('modal-settings'),
-    btnSave: document.getElementById('btn-save-settings'),
-    inputName: document.getElementById('input-name'),
-    btnDecrease: document.getElementById('btn-decrease'),
-    btnIncrease: document.getElementById('btn-increase'),
-    displayPercent: document.getElementById('display-percent'),
-    checkBold: document.getElementById('check-bold'),
-    resultContainer: document.getElementById('result-container'),
-    loader: document.getElementById('loader'),
-    outputText: document.getElementById('output-message'),
-    outputImage: document.getElementById('output-image')
-};
+import { dom } from './constants.js';
 
 // Variables locales pour la modale
 let tempScale = state.scale;
