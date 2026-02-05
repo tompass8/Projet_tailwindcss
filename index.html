@@ -13,7 +13,7 @@
             100% { transform: translate(0px, 0px) scale(1); }
         }
 
-        /* [ACCESSIBILITÉ] Si l'utilisateur demande moins de mouvement, on annule l'anim */
+
         @media (prefers-reduced-motion: no-preference) {
             .animate-blob { animation: blob 7s infinite; }
         }
@@ -25,7 +25,6 @@
             transition: all 0.3s ease-in-out;
         }
 
-        /* [ACCESSIBILITÉ] On désactive les mouvements brusques du bouton si 'reduced motion' est activé */
         @media (prefers-reduced-motion: no-preference) {
             .btn-super-hover:hover {
                 transform: translateY(-5px);
@@ -37,9 +36,8 @@
             box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.6);
         }
 
-        /* Styles Focus visible pour la navigation clavier */
         button:focus-visible {
-            outline: 2px solid #2563EB; /* Bleu standard */
+            outline: 2px solid #2563EB;
             outline-offset: 2px;
         }
 
