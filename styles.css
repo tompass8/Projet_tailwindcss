@@ -1,1 +1,53 @@
 @import "tailwindcss";
+
+@keyframes blob {
+	0% { transform: translate(0px, 0px) scale(1); }
+	33% { transform: translate(30px, -50px) scale(1.1); }
+	66% { transform: translate(-20px, 20px) scale(0.9); }
+	100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.animate-blob { animation: blob 7s infinite; }
+}
+
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+
+.btn-super-hover {
+	transition: all 0.3s ease-in-out;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.btn-super-hover:hover {
+		transform: translateY(-5px);
+	}
+}
+
+.btn-super-hover:hover {
+	filter: brightness(0.85);
+	box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.6);
+}
+
+button:focus-visible {
+	outline: 2px solid #2563EB;
+	outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+	#avatar-img {
+		width: 70vw !important;
+		height: 70vw !important;
+		max-width: 280px;
+		max-height: 280px;
+	}
+	#output-message {
+		font-size: 1.5rem !important;
+		line-height: 2rem;
+	}
+	.btn-super-hover {
+		padding-top: 16px;
+		padding-bottom: 16px;
+		font-size: 1.25rem;
+	}
+}

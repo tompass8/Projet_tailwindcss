@@ -123,3 +123,4 @@ function applyZoom() {
     zoomContainer.style.zoom = currentZoom;
     zoomDisplay.textContent = Math.round(currentZoom * 100) + "%";
 }
+
